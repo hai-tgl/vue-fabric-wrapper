@@ -32,6 +32,7 @@ let canvasEvents = [
   "mouse:down",
   "mouse:move",
   "mouse:up",
+  "mouse:wheel",
   "mouse:down:before",
   "mouse:move:before",
   "mouse:up:before",

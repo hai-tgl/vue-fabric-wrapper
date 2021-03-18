@@ -166,7 +166,8 @@ export default {
     transparentCorners: { type: Boolean, default: true },
     //type :String, not editable
     visible: { type: Boolean, default: true },
-    width: Number
+    width: Number,
+    crossOrigin: { type: String, default: 'anonymous' },
   },
   inject: ["$canvas", "$group", "fabric"],
   provide() {

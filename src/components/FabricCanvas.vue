@@ -42,10 +42,12 @@ let canvasEvents = [
   "dragover",
   "dragenter",
   "dragleave",
-  "drop"
+  "drop",
+  "touch:gesture",
+  "touch:drag",
 ];
 
-import * as fabric from "fabric";
+import * as fabric from "fabric-with-gestures";
 import fabricStaticCanvas from "./fabricStaticCanvas";
 
 export default {
@@ -61,7 +63,7 @@ export default {
     containerClass: {
       type: String,
       required: false,
-      default: "canvas-container"
+      default: "canvas-container",
     },
     defaultCursor: { type: String, required: false, default: "default" },
     fireMiddleClick: { type: Boolean, required: false, default: false },
@@ -78,12 +80,12 @@ export default {
     selectionBorderColor: {
       type: String,
       required: false,
-      default: "rgba(255, 255, 255, 0.3)"
+      default: "rgba(255, 255, 255, 0.3)",
     },
     selectionColor: {
       type: String,
       required: false,
-      default: "rgba(100, 100, 255, 0.3)"
+      default: "rgba(100, 100, 255, 0.3)",
     },
     // selectionDashArray: {
     //   type: Array,
@@ -104,50 +106,50 @@ export default {
 
     backgroundColor: { type: String, required: false, default: "" },
     width: { type: Number, required: false, default: 600 },
-    height: { type: Number, required: false, default: 400 }
+    height: { type: Number, required: false, default: 400 },
   },
   data() {
     return {
       canvas: null,
-      type: "canvas"
+      type: "canvas",
     };
   },
   provide() {
     return {
       $canvas: () => this.canvas,
       $group: () => null,
-      fabric
+      fabric,
     };
   },
   methods: {
     createEvents() {
-      canvasEvents.forEach(event => {
+      canvasEvents.forEach((event) => {
         let vueEvent = event.split(":").join("-");
-        this.canvas.on(event, e => {
+        this.canvas.on(event, (e) => {
           this.$emit(vueEvent, e);
         });
       });
-    }
+    },
   },
   computed: {
     definedProps() {
       const obj = { ...this.$props };
-      Object.keys(obj).forEach(key => {
+      Object.keys(obj).forEach((key) => {
         if (obj[key] === undefined) {
           delete obj[key];
         }
       });
       return obj;
-    }
+    },
   },
   mounted() {
     this.canvas = new fabric.Canvas(this.id, {
-      ...this.definedProps
+      ...this.definedProps,
     });
     this.createEvents();
   },
   beforeDestroy() {
-    canvasEvents.forEach(event => {
+    canvasEvents.forEach((event) => {
       let vueEvent = event.split(":").join("-");
       this.canvas.off(event, this.$emit(vueEvent));
     });
@@ -158,7 +160,7 @@ export default {
         this.$emit("canvas-updated", this.canvas);
       },
       deep: true,
-      initial: true
+      initial: true,
     },
     height(newValue) {
       this.canvas.setHeight(newValue);
@@ -179,8 +181,8 @@ export default {
       this.canvas.setOverlayColor(newValue, () => {
         this.canvas.renderAll();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
